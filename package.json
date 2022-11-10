@@ -1,7 +1,7 @@
 {
-    "name": "BasicStarter",
-    "version": "0.0.0",
-    "description": "Simple repo contenant le stric minimum pour bien commencer un projet",
+    "name": "Bilmo",
+    "version": "0.0.1",
+    "description": "API B2B",
     "repository": "https://github.com/MyrrdinAlsatian/BasicStarter.git",
     "author": "Myrrdin <stephan.jeanba@gmail.com>",
     "license": "MIT",
