@@ -1,7 +1,5 @@
 security:
-    encoders:
-        App\Entity\User:
-            algorithm: auto
+    enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -17,15 +15,15 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        registration: 
+        registration:
             pattern: ^/api/users
-            anonymous: true
+            # anonymous: true
             stateless: true
             methods: [POST]
         
         login:
             pattern: ^/api/login
-            anonymous: true
+            # anonymous: true
             stateless: true
             json_login:
                 check_path: /api/login_check
@@ -34,11 +32,9 @@ security:
         
         api:
             pattern: ^/api
-            anonymous: true
+            # anonymous: true
             stateless: true
-            guard: 
-                authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
+            jwt: ~
 
         main:
             lazy: true
