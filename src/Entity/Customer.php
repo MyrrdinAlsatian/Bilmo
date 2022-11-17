@@ -2,14 +2,42 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Stmt\Nop;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(normalizationContext: [
+    // 'groups'=>['user'],
+    'jsonld_embed_context' => true])
+    ]
+#[ApiFilter(SearchFilter::class, properties: [
+    'user' => SearchFilter::STRATEGY_EXACT
+    ])]
+
+#[ApiResource(
+    uriTemplate: '/users/{userId}/customer/{id}',
+    uriVariables: [
+        'userId' => new Link(fromClass: User::class, toProperty: "user"),
+        'id' => new Link(fromClass: Customer::class)
+    ],
+    operations: [new Get()],
+    normalizationContext:['groups' => ['user_customer_details']],
+)]
+#[Get(security:"is_granted('ROLE_USER') or object.owner == user" )]
+#[Post()]
+#[Delete()]
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
-#[ApiResource()]
 class Customer
 {
     #[ORM\Id]
@@ -18,27 +46,37 @@ class Customer
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user_getsubresource_customers", "user","user_customer_details"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user_getsubresource_customers", "user","user_customer_details"])]
     private ?string $forname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user_getsubresource_customers", "user","user_customer_details"])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user_getsubresource_customers", "user","user_customer_details"])]
     private ?string $adress = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user_getsubresource_customers", "user","user_customer_details"])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user_getsubresource_customers", "user","user_customer_details"])]
     private ?string $country = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user_getsubresource_customers", "user","user_customer_details"])]
     private ?string $zipcode = null;
 
+    /** @var Collection<int, User> */
+    #[ORM\JoinTable('customer_user')]
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'customers')]
+    // #[Link(toProperty:'customers')]
     private Collection $user;
 
     public function __construct()
