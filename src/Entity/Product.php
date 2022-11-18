@@ -2,13 +2,43 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    paginationItemsPerPage: 3,
+    paginationMaximumItemsPerPage: 3,
+    paginationClientItemsPerPage: true,
+    normalizationContext: [
+    'groups' =>["product:read"],
+    'jsonld_embed_context' => true])]
+#[ApiFilter(OrderFilter::class, properties:[
+    'quantity' => 'ASC'
+    ])]
+#[Get]
+#[GetCollection]
+#[ApiResource(
+    description:'Listing des produits d\'une marque',
+    uriTemplate: '/brands/{brandId}/products',
+    uriVariables: [
+        'brandId' => new Link(fromClass:Brand::class, toProperty:'brand')
+    ],
+    operations: [new GetCollection()],
+    normalizationContext:['groups' =>['brand:read']]
+)]
+    
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ApiResource()]
 class Product
 {
     #[ORM\Id]
@@ -17,21 +47,27 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['product:read', 'brand:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['product:read', 'brand:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 8, scale: 2)]
+    #[Groups(['product:read', 'brand:read'])]
     private ?string $price = null;
 
     #[ORM\Column]
+    #[Groups(['product:read', 'brand:read'])]
     private ?int $quantity = null;
 
     #[ORM\Column]
+    #[Groups(['product:read', 'brand:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'product')]
+    #[Groups(['product:read'])]
     private ?Brand $brand = null;
 
     public function getId(): ?int

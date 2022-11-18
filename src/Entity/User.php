@@ -3,15 +3,43 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Driver\Mysqli\Initializer\Secure;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['user']],
+    denormalizationContext: ['groups' => ['user', 'user:write']]
+)]
+#[ApiResource(
+    uriTemplate: 'users/{id}/customers',
+    operations: [new Get()],
+    normalizationContext:['groups' => ['user_getsubresource_customers']]
+)]
+// #[ApiResource(
+//     description: 'TOTO',
+//     normalizationContext:[
+//         'groups'=>['user','user:read'],
+//         'skip_null_values'=>false]
+// )]
+// #[ApiResource(operations: [
+//     new Post(name: '/whoami', routeName: 'login_check')
+// ])]
+#[Delete(security:"is_granted('ROLE_ADMIN')")]
+
+#[Get()]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -20,19 +48,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(["user"])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Ignore]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Ignore]
     private ?string $password = null;
 
     #[ORM\ManyToMany(targetEntity: Customer::class, mappedBy: 'user')]
+    #[ORM\JoinTable('customer_user')]
+    #[Groups("user_getsubresource_customers")]
     private Collection $customers;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -61,6 +97,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
+    #[Ignore()]
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
@@ -132,6 +169,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->customers->removeElement($customer)) {
             $customer->removeUser($this);
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
