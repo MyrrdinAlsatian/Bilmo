@@ -22,24 +22,19 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['user']],
-    denormalizationContext: ['groups' => ['user', 'user:write']],
-    operations:[
-            new Delete(security: "is_granted('ROLE_ADMIN')"),
-            new Post(security: "is_granted('ROLE_ADMIN')"),
-            new Patch(security: "is_granted('ROLE_ADMIN')"),
-            new Get(security: "is_granted('ROLE_ADMIN')"),
-            new Get(name:'getUserCustomers', uriTemplate: 'users/{id}/customers',
-            normalizationContext: ['groups' => ['user_getsubresource_customers']]
-        ),
-            new GetCollection(security: "is_granted('ROLE_ADMIN')"),        
-    ]
-)]
+    denormalizationContext: ['groups' => ['user', 'user:write']]
+        )]
+#[Delete(security: "is_granted('ROLE_ADMIN')")]
+#[Post(security: "is_granted('ROLE_ADMIN')")]
+#[Patch(security: "is_granted('ROLE_ADMIN')")]
+#[Get(security: "is_granted('ROLE_ADMIN')")]
+#[GetCollection(security: "is_granted('ROLE_ADMIN')")]        
 
-// #[ApiResource(
-//     uriTemplate: 'users/{id}/customers',
-//     operations: [new Get(security: "is_granted('ROLE_USER') or object.id == user")],
-//     normalizationContext:['groups' => ['user_getsubresource_customers']]
-// )]
+#[ApiResource(
+    uriTemplate: 'users/{id}/customers',
+    operations: [new Get(security: "is_granted('ROLE_USER') or object.id == user")],
+    normalizationContext:['groups' => ['user_getsubresource_customers']]
+)]
 // #[ApiResource(
 //     description: 'TOTO',
 //     normalizationContext:[
