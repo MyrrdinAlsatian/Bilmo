@@ -16,7 +16,8 @@ class PasswordEncoderSubscriber implements EventSubscriberInterface
     */
     private $encoder;
 
-    public function __construct(UserPasswordHasherInterface $encoder){
+    public function __construct(UserPasswordHasherInterface $encoder)
+    {
         $this->encoder = $encoder;
     }
 
@@ -27,7 +28,7 @@ class PasswordEncoderSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function hashPassword(ViewEvent $event)
+    public function hashPassword(ViewEvent $event):void
     {
         $result = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();

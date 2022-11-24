@@ -24,7 +24,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientItemsPerPage: true,
     normalizationContext: [
     'groups' =>["product:read"],
-    'jsonld_embed_context' => true])]
+    'jsonld_embed_context' => true],
+        cacheHeaders: [
+            'max_age' => 60,
+            'shared_max_age' => 120,
+            'vary' => ['Authorization', 'Accept-Language']
+        ]),
+    ]
 #[ApiFilter(OrderFilter::class, properties:[
     'quantity' => 'ASC'
     ])]
