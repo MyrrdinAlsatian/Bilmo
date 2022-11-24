@@ -2,3 +2,12 @@ api_platform:
     resource: .
     type: api_platform
     prefix: /api
+    http_cache:
+        invalidation: 
+            enabled: true
+            public: true
+    defaults:
+        cache_headers:
+            max_age: 60
+            shared_max_age: 3600
+            vary: ['Content-Type', 'Authorization', 'Origin']
