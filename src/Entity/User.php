@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,10 +23,16 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 #[ApiResource(
     normalizationContext: ['groups' => ['user']],
     denormalizationContext: ['groups' => ['user', 'user:write']]
-)]
+        )]
+#[Delete(security: "is_granted('ROLE_ADMIN')")]
+#[Post(security: "is_granted('ROLE_ADMIN')")]
+#[Patch(security: "is_granted('ROLE_ADMIN')")]
+#[Get(security: "is_granted('ROLE_ADMIN')")]
+#[GetCollection(security: "is_granted('ROLE_ADMIN')")]        
+
 #[ApiResource(
     uriTemplate: 'users/{id}/customers',
-    operations: [new Get()],
+    operations: [new Get(security: "is_granted('ROLE_USER') or object.id == user")],
     normalizationContext:['groups' => ['user_getsubresource_customers']]
 )]
 // #[ApiResource(
@@ -37,15 +44,13 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 // #[ApiResource(operations: [
 //     new Post(name: '/whoami', routeName: 'login_check')
 // ])]
-#[Delete(security:"is_granted('ROLE_ADMIN')")]
 
-#[Get()]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(["user"])]

@@ -6,9 +6,11 @@ use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\ProductRepository;
@@ -26,17 +28,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(OrderFilter::class, properties:[
     'quantity' => 'ASC'
     ])]
-#[Get]
-#[GetCollection]
+#[Get(security: "is_granted('ROLE_USER')")]
+#[GetCollection(security: "is_granted('ROLE_USER')")]
+#[Post(security: "is_granted('ROLE_ADMIN')")]
+#[Delete(security: "is_granted('ROLE_ADMIN')")]
+#[Patch(security: "is_granted('ROLE_ADMIN')")]
 #[ApiResource(
     description:'Listing des produits d\'une marque',
     uriTemplate: '/brands/{brandId}/products',
     uriVariables: [
         'brandId' => new Link(fromClass:Brand::class, toProperty:'brand')
     ],
-    operations: [new GetCollection()],
+    operations: [new GetCollection(security: "is_granted('ROLE_USER')")],
     normalizationContext:['groups' =>['brand:read']]
 )]
+
     
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
