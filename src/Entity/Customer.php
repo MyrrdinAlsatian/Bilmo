@@ -9,12 +9,13 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use PhpParser\Node\Stmt\Nop;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(normalizationContext: [
@@ -31,12 +32,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'userId' => new Link(fromClass: User::class, toProperty: "user"),
         'id' => new Link(fromClass: Customer::class)
     ],
-    operations: [new Get()],
+    operations: [new Get(security: "is_granted('ROLE_USER') or object.getUser() == user")],
     normalizationContext:['groups' => ['user_customer_details']],
 )]
-#[Get(security:"is_granted('ROLE_USER') or object.owner == user" )]
-#[Post()]
-#[Delete()]
+#[Get(security:"is_granted('ROLE_USER') or object.getUser() == user" )]
+#[Post(security:"is_granted('ROLE_USER') or object.getUser() == user" )]
+#[Put(security:"is_granted('ROLE_USER') or object.getUser() == user" )]
+#[Patch(security: "is_granted('ROLE_USER') or object.getUser() == user")]
+#[Delete(security:"is_granted('ROLE_USER') or object.getUser() == user" )]
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 class Customer
 {
