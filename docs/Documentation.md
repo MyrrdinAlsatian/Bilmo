@@ -1,5 +1,34 @@
 # Documentation API BilMo
 
+- [Documentation API BilMo](#documentation-api-bilmo)
+  - [Description](#description)
+  - [L'inscription](#linscription)
+  - [L'authentification](#lauthentification)
+      - [Demande de token:](#demande-de-token)
+      - [Retour attendu](#retour-attendu)
+  - [Récupérer les articles](#récupérer-les-articles)
+    - [Récupérer tous les articles](#récupérer-tous-les-articles)
+      - [Exemple avec javascript:](#exemple-avec-javascript)
+      - [Schémas de retour](#schémas-de-retour)
+    - [Récupérer un articles](#récupérer-un-articles)
+      - [Exemple avec javascript:](#exemple-avec-javascript-1)
+      - [Retour attendu](#retour-attendu-1)
+    - [Récupérer l'ensemble des products d'une marque](#récupérer-lensemble-des-products-dune-marque)
+      - [Exemple avec javascript:](#exemple-avec-javascript-2)
+      - [Retour attendu](#retour-attendu-2)
+  - [Gestion des clients](#gestion-des-clients)
+    - [Ajouter un client](#ajouter-un-client)
+      - [Exemple avec javascript:](#exemple-avec-javascript-3)
+      - [Retour attendu](#retour-attendu-3)
+    - [Supprimer un utilisateur](#supprimer-un-utilisateur)
+      - [Exemple avec javascript:](#exemple-avec-javascript-4)
+    - [Récupérer l'ensemble des clients d'un utilisateur](#récupérer-lensemble-des-clients-dun-utilisateur)
+      - [Exemple avec javascript:](#exemple-avec-javascript-5)
+      - [Retour attendu](#retour-attendu-4)
+    - [Récupérer les détails d'un clients d'un utilisateur](#récupérer-les-détails-dun-clients-dun-utilisateur)
+      - [Exemple avec javascript:](#exemple-avec-javascript-6)
+      - [Retour attendu](#retour-attendu-5)
+
 ## Description
 Documentation technique de relative à l’accès au catalogue via l'**API** (Application Programming Interface) B2B (business to business) **BilMo**.
 
