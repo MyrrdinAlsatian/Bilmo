@@ -25,7 +25,8 @@ use Symfony\Component\Serializer\Annotation\Ignore;
     denormalizationContext: ['groups' => ['user', 'user:write']]
         )]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
-#[Post(security: "is_granted('ROLE_ADMIN')")]
+// #[Post(security: "is_granted('ROLE_USER')")]
+#[Post()]
 #[Patch(security: "is_granted('ROLE_ADMIN')")]
 #[Get(security: "is_granted('ROLE_ADMIN')")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]        
@@ -50,10 +51,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["user"])]
     public ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(["user"])]
+    #[Groups(["user", "user:write"])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -64,7 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Ignore]
+    #[Groups(["user:write"])]
     private ?string $password = null;
 
     #[ORM\ManyToMany(targetEntity: Customer::class, mappedBy: 'user')]
@@ -73,6 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $customers;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user:write"])]
     private ?string $name = null;
 
     public function __construct()
