@@ -6,27 +6,28 @@
   - [L'authentification](#lauthentification)
       - [Demande de token:](#demande-de-token)
       - [Retour attendu](#retour-attendu)
+      - [Exemple avec javascript:](#exemple-avec-javascript)
   - [Récupérer les articles](#récupérer-les-articles)
     - [Récupérer tous les articles](#récupérer-tous-les-articles)
-      - [Exemple avec javascript:](#exemple-avec-javascript)
+      - [Exemple avec javascript:](#exemple-avec-javascript-1)
       - [Schémas de retour](#schémas-de-retour)
     - [Récupérer un articles](#récupérer-un-articles)
-      - [Exemple avec javascript:](#exemple-avec-javascript-1)
+      - [Exemple avec javascript:](#exemple-avec-javascript-2)
       - [Retour attendu](#retour-attendu-1)
     - [Récupérer l'ensemble des products d'une marque](#récupérer-lensemble-des-products-dune-marque)
-      - [Exemple avec javascript:](#exemple-avec-javascript-2)
+      - [Exemple avec javascript:](#exemple-avec-javascript-3)
       - [Retour attendu](#retour-attendu-2)
   - [Gestion des clients](#gestion-des-clients)
     - [Ajouter un client](#ajouter-un-client)
-      - [Exemple avec javascript:](#exemple-avec-javascript-3)
+      - [Exemple avec javascript:](#exemple-avec-javascript-4)
       - [Retour attendu](#retour-attendu-3)
     - [Supprimer un utilisateur](#supprimer-un-utilisateur)
-      - [Exemple avec javascript:](#exemple-avec-javascript-4)
-    - [Récupérer l'ensemble des clients d'un utilisateur](#récupérer-lensemble-des-clients-dun-utilisateur)
       - [Exemple avec javascript:](#exemple-avec-javascript-5)
+    - [Récupérer l'ensemble des clients d'un utilisateur](#récupérer-lensemble-des-clients-dun-utilisateur)
+      - [Exemple avec javascript:](#exemple-avec-javascript-6)
       - [Retour attendu](#retour-attendu-4)
     - [Récupérer les détails d'un clients d'un utilisateur](#récupérer-les-détails-dun-clients-dun-utilisateur)
-      - [Exemple avec javascript:](#exemple-avec-javascript-6)
+      - [Exemple avec javascript:](#exemple-avec-javascript-7)
       - [Retour attendu](#retour-attendu-5)
 
 ## Description
@@ -65,6 +66,29 @@ Pour vous identifier sur **l'API BilMo** vous devez envoyer  dans le **header** 
 
 ```
 > ⚠️ Ce token est à mettre **obligatoirement** dans le Header de vos requêtes
+> Ainsi que la mention du Content-Type application/json
+#### Exemple avec javascript:
+```js
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "username": "Arvilla_Heidenreich14@hotmail.com",
+  "password": "password"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("localhost:8001/api/login_check", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+```
 
 ## Récupérer les articles
 Liste de l'ensemble des endpoints liés aux produits utilisable par un client de BilMo
@@ -75,6 +99,7 @@ La route **```/api/products```** permet de recevoir l'ensemble des produits BilM
 ```js
 var myHeaders = new Headers();
 myHeaders.append("Authorization", "Bearer SomeTokenOfTypeJWTToken");
+myHeaders.append("Content-Type", "application/json");
 
 var requestOptions = {
   method: 'GET',
@@ -151,6 +176,7 @@ idDeLArticle est à remplacer par l'`id` (int) d'un produit.
 ```js
 var myHeaders = new Headers();
 myHeaders.append("Authorization", "Bearer SomeTokenOfTypeJWTToken");
+myHeaders.append("Content-Type", "application/json");
 
 var requestOptions = {
   method: 'GET',
@@ -192,6 +218,7 @@ La route **```/api/brands/ID/products```** permet de recevoir l'ensemble des pro
 ```js
 var myHeaders = new Headers();
 myHeaders.append("Authorization", "Bearer SomeTokenOfTypeJWTToken");
+myHeaders.append("Content-Type", "application/json");
 
 var requestOptions = {
   method: 'GET',
@@ -325,6 +352,7 @@ La route `/api/users/usersID/customers` permet de lister l'ensemble des clients 
 ```js
 var myHeaders = new Headers();
 myHeaders.append("Authorization", "Bearer SomeTokenOfTypeJWTToken");
+myHeaders.append("Content-Type", "application/json");
 
 var requestOptions = {
   method: 'GET',
@@ -365,6 +393,7 @@ La route `/api/users/usersID/customers/id` permet de récupére les détails d'u
 ```js
 var myHeaders = new Headers();
 myHeaders.append("Authorization", "Bearer SomeTokenOfTypeJWTToken");
+myHeaders.append("Content-Type", "application/json");
 
 var requestOptions = {
   method: 'GET',
