@@ -17,6 +17,7 @@ use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     paginationItemsPerPage: 3,
@@ -24,13 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientItemsPerPage: true,
     normalizationContext: [
     'groups' =>["product:read"],
-    'jsonld_embed_context' => true],
-        cacheHeaders: [
-            'max_age' => 60,
-            'shared_max_age' => 120,
-            'vary' => ['Authorization', 'Accept-Language']
-        ]),
-    ]
+    'jsonld_embed_context' => true])]
 #[ApiFilter(OrderFilter::class, properties:[
     'quantity' => 'ASC'
     ])]
@@ -55,23 +50,28 @@ class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type:"integer")]
+    #[Assert\NotBlank]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['product:read', 'brand:read'])]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['product:read', 'brand:read'])]
+    #[Assert\NotBlank()]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 8, scale: 2)]
     #[Groups(['product:read', 'brand:read'])]
+    #[Assert\NotBlank()]
     private ?string $price = null;
 
     #[ORM\Column]
     #[Groups(['product:read', 'brand:read'])]
+    #[Assert\NotBlank()]
     private ?int $quantity = null;
 
     #[ORM\Column]
