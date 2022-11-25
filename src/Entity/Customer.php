@@ -61,7 +61,9 @@ class Customer
 
     #[ORM\Column(length: 255)]
     #[Groups(["user_getsubresource_customers", "user","user_customer_details"])]
-    #[Assert\Email()]
+    #[Assert\Email(
+        message: 'The email {{ value }} is not a valid email.',
+    )]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]

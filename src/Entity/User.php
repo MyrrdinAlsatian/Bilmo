@@ -56,7 +56,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(["user", "user:write"])]
-    #[Assert\Email]
+    #[Assert\Email(
+        message: 'The email address {{value}} is not a valid email address'
+    )]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -68,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Groups(["user:write"])]
+    #[Assert\NotBlank()]
     private ?string $password = null;
 
     #[ORM\ManyToMany(targetEntity: Customer::class, mappedBy: 'user')]

@@ -57,22 +57,22 @@ class Product
 
     #[ORM\Column(length: 255)]
     #[Groups(['product:read', 'brand:read'])]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(min:3)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['product:read', 'brand:read'])]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(min:6)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 8, scale: 2)]
     #[Groups(['product:read', 'brand:read'])]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank]
     private ?string $price = null;
 
     #[ORM\Column]
     #[Groups(['product:read', 'brand:read'])]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(min:0)]
     private ?int $quantity = null;
 
     #[ORM\Column]
@@ -81,6 +81,7 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'product')]
     #[Groups(['product:read'])]
+    #[Assert\Valid()]
     private ?Brand $brand = null;
 
     public function getId(): ?int
