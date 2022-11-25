@@ -409,7 +409,7 @@
 			"response": []
 		},
 		{
-			"name": "should remove a product",
+			"name": "should remove a customer",
 			"event": [
 				{
 					"listen": "test",
@@ -455,14 +455,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/api/products/{{lastProduct}}",
+					"raw": "{{URL}}/api/customers/A",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"api",
-						"products",
-						"{{lastProduct}}"
+						"customers",
+						"A"
 					]
 				}
 			},
@@ -472,7 +472,13 @@
 			"name": "Get a Customer",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{URL}}/api/customers/{{lastCustomer}}",
 					"host": [
@@ -482,6 +488,31 @@
 						"api",
 						"customers",
 						"{{lastCustomer}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bad Get a Customer",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/api/customers/Z",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"customers",
+						"Z"
 					]
 				}
 			},
@@ -501,7 +532,13 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{URL}}/api/users/3",
 					"host": [
@@ -585,7 +622,13 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{URL}}{{iriUser}}/customer/{{lastCustomer}}",
 					"host": [
@@ -670,7 +713,13 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{URL}}/api/brands/4/products",
 					"host": [
@@ -680,6 +729,42 @@
 						"api",
 						"brands",
 						"4",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bad Get Product from brand",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/api/brands/A/products",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"brands",
+						"A",
 						"products"
 					]
 				}
