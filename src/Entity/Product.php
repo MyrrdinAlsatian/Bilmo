@@ -40,6 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     uriVariables: [
         'brandId' => new Link(fromClass:Brand::class, toProperty:'brand')
     ],
+    requirements:['brandId'=> '\d+'],
     operations: [new GetCollection(security: "is_granted('ROLE_USER')")],
     normalizationContext:['groups' =>['brand:read']]
 )]
